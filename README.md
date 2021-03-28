@@ -1,13 +1,14 @@
 # RootedWI
 Rooted's Troy Farm customer balance app
 
-# Getting Started (From UWanted tutorial)
+## Getting Started 
+(From UWanted tutorial)
 
 How to create a new branch from other's and push your branch to remote repo
 
 * First you need to clone the remote repository
 
-        git clone https://github.com/Code4Good-UWMadison/UWanted.git
+        git clone https://github.com/owenjcarr/RootedWI.git
 
     Then create a new branch from an old branch you want to work from
 
