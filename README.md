@@ -10,7 +10,7 @@ How to create a new branch from other's and push your branch to remote repo
 
         git clone https://github.com/owenjcarr/RootedWI.git
 
-    Then create a new branch from an old branch you want to work from
+    Then create a new branch from an old branch you want to work from (name newbranch "yourname-dev")
 
         git checkout -b newbranch master
 
