@@ -12,7 +12,7 @@ How to create a new branch from other's and push your branch to remote repo
 
     Then create a new branch from an old branch you want to work from
 
-        git checkout -b newbranch oldbranch
+        git checkout -b newbranch master
 
     And now you are in your new branch.
 
