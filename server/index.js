@@ -7,7 +7,11 @@ const app = express();
 
 // bodyparser middleware
 app.use(express.json());
-app.use(express.urlencoded());
+
+app.post(
+    '/test',
+    (req, res) => res.json(req.body)
+  );
 
 // use routes
 app.use('/api/users', require ('./routes/api/users'));
