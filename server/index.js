@@ -8,13 +8,9 @@ const app = express();
 // bodyparser middleware
 app.use(express.json());
 
-app.post(
-    '/test',
-    (req, res) => res.json(req.body)
-  );
-
 // use routes
 app.use('/api/users', require ('./routes/api/users'));
+app.use('/api/auth', require ('./routes/api/auth'));
 
 const PORT = process.env.PORT || 8000;
 

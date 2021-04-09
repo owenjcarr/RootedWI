@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "config": "^3.3.6",
     "connect-mongo": "^4.4.1",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
