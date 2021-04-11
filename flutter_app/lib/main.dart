@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import './screens/login.dart';
-import './screens/home.dart';
-import './screens/change_pass.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      home: LoginScreen()
     );
   }
 }
