@@ -1,18 +1,22 @@
-const mongoose = require('mongoose');
-const dbConfig = require('./dbConfig')
+// const mongoose = require('mongoose');
+const dbConfig = require('./dbConfig');
+const {MongoClient} = require('mongodb');
 
-const connectDB = async() => {
+const connectDB = async (f) => {
+    const client = new MongoClient(dbConfig.database, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+    });
     try {
-        const conn = await mongoose.connect(dbConfig.database, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false
-        })
-        console.log(`MongoDB Connected: ${conn.connection.host}`)
-    }
-    catch (err) {
+        await client.connect();
+        console.log(`MongoDB Connected`)
+        return await f(client);
+    } catch (err) {
         console.log(err)
         process.exit(1)
+    } finally {
+        await client.close();
     }
 }
 
