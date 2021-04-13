@@ -1,7 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const connectDB_temp = require('./config/db_temp');
 
-// connectDB()
+connectDB()
 
 const app = express();
 
@@ -30,7 +31,7 @@ async function _getProduce(client){
 };
 
 async function getProduce(){
-    let produce = connectDB(_getProduce);
+    let produce = connectDB_temp(_getProduce);
     return produce;
 }
 
