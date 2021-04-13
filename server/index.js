@@ -5,8 +5,15 @@ const connectDB = require('./config/db');
 
 const app = express();
 
+// bodyparser middleware
+app.use(express.json());
+
+// use routes
+app.use('/api/users', require ('./routes/api/users'));
+app.use('/api/auth', require ('./routes/api/auth'));
 
 
+// TODO: use express routes
 // Filler method until I can connect with google sheets
 function getBalance(id){
     return 0;
@@ -29,6 +36,7 @@ async function getProduce(){
 
 app.get('/api/produce', async (req, res) => {
     let produce = await getProduce();
+    // TODO: use try catch to return 400 on error
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(produce));
 })
