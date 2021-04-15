@@ -16,8 +16,8 @@ app.use('/api/auth', require ('./routes/api/auth'));
 
 
 // TODO: use express routes
-async function getBalance(id){
-    let data = await getAllData(id);
+async function getBalance(name){
+    let data = await getAllData(name);
     console.log(data);
     return data;
 }
@@ -44,11 +44,11 @@ app.get('/api/produce', async (req, res) => {
     res.end(JSON.stringify(produce));
 })
 
-app.get('/api/balance/:id', async (req,res) => {
-    let id = req.params.id;
-    let bal = await getBalance(id);
-    let response = `The balance of ${id} is ${bal}`
-    res.send(response);
+app.get('/api/balance/:name', async (req,res) => {
+    let name = req.params.name;
+    let balance = await getBalance(name);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify({name, balance}));
 })
 
 app.get('/', (req,res) => {
