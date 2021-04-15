@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dbConfig = require('./dbConfig')
 const config = require('config');
-// const {MongoClient} = require('mongodb');
+const {MongoClient} = require('mongodb');
 
 const connectDB = async (f) => {
     const client = new MongoClient(dbConfig.database, {

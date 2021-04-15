@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const connectDB_temp = require('./config/db_temp');
+const getAllData = require('./accessBalanceSheet');
 
 connectDB()
 
@@ -15,9 +16,10 @@ app.use('/api/auth', require ('./routes/api/auth'));
 
 
 // TODO: use express routes
-// Filler method until I can connect with google sheets
-function getBalance(id){
-    return 0;
+async function getBalance(id){
+    let data = await getAllData(id);
+    console.log(data);
+    return data;
 }
 
 async function _getProduce(client){
@@ -31,7 +33,7 @@ async function _getProduce(client){
 };
 
 async function getProduce(){
-    let produce = connectDB_temp(_getProduce);
+    let produce = await connectDB_temp(_getProduce);
     return produce;
 }
 
@@ -42,9 +44,9 @@ app.get('/api/produce', async (req, res) => {
     res.end(JSON.stringify(produce));
 })
 
-app.get('/api/balance/:id', (req,res) => {
+app.get('/api/balance/:id', async (req,res) => {
     let id = req.params.id;
-    let bal = getBalance(id);
+    let bal = await getBalance(id);
     let response = `The balance of ${id} is ${bal}`
     res.send(response);
 })

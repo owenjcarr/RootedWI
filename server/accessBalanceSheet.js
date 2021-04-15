@@ -67,15 +67,13 @@ function getBalance(response, name) {
  * @param {string} name A name (case sensitive) in the balance sheet
  * @returns {number} The current balance of "name" or null if name isn't found
  */
-async function getAllData(name) {
+const getAllData = async (name) => {
     if (name === "" || typeof name !== 'string')
         return null;
 
     const auth = await getAuthToken();
     const response = await getSheetValues({auth});
     return getBalance(response, name);
-}
+};
   
-module.exports = {
-    getAllData
-}
+module.exports = getAllData;
