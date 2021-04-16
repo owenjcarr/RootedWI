@@ -11,13 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@googleapis/sheets": "^0.3.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
     "connect-mongo": "^4.4.1",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "googleapis": "^71.0.0",
     "mongodb": "^3.6.5",
     "mongoose": "^5.9.15",
     "nodemon": "^2.0.7"
