@@ -6,7 +6,7 @@
  * are moved to different columns, nameCol and balanceCol must be updated!
  */
 
-const { google } = require('googleapis')
+const google = require('@googleapis/sheets')
 
 // Column of the sheet containing names
 const nameCol = 0;
