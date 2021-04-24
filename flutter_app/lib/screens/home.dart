@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -52,12 +54,18 @@ class _ProduceListState extends State<ProduceList> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.green,
-    //     title: Text(title),
-    //   ),
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Hello"),
+        leading: GestureDetector(
+        onTap: () {
+          context.read<AuthenticationService>().signOut();
+          child: Icon(
+            Icons.navigate_before,  // add custom icons also
+          );
+         },
+      ),
+      ),
       body: _buildProduceList(),
     );
   }
