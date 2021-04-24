@@ -1,27 +1,22 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Auth {
-  Dio dio = new Dio();
+class AuthenticationService {
+  final FirebaseAuth _firebaseAuth;
+  
+  AuthenticationService(this._firebaseAuth);
 
-  login(email, password) async {
+  Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  Future<String> signIn ({String email, String password}) async {
     try {
-      return await dio.post('http://10.0.2.2:8000/api/auth/', data: {
-        "email": email,
-        "password": password
-      },  options: Options(contentType: Headers.jsonContentType)
-      );
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      return "Signed in";
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
-    on DioError catch(e) {
-      Fluttertoast.showToast(msg: e.response.data['msg'],
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0
-      );
-    }
+  }
+
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
   }
 }
