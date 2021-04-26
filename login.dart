@@ -124,6 +124,30 @@ Widget buildChangePassword() {
     ),
   );
 }
+
+Widget buildLoginBtn() {
+  return Container (
+    padding: EdgeInsets.symmetric(vertical: 25),
+    width: double.infinity,
+    child: RaisedButton(
+      elevation: 5,
+      onPressed: () => print('Login Pressed'),
+      padding: EdgeInsets.all(15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15)
+      ),
+      color: Colors.white,
+      child: Text(
+        'LOGIN',
+        style: TextStyle(
+          color: Color(0xff5E3B66),
+          fontSize: 18,
+          fontWeight: FontWeight.bold
+        ),
+      )
+    ),
+  );
+}
 class _LoginState extends State<Login> {
 
   @override
@@ -168,6 +192,7 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 20),
                   buildPassword(),
                   buildChangePassword(),
+                  buildLoginBtn(),
                 ],
               ),
                 ),
