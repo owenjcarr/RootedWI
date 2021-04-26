@@ -58,11 +58,11 @@ class _ProduceListState extends State<ProduceList> {
       appBar: AppBar(
         title: Text("Hello"),
         leading: GestureDetector(
+        child: Icon(
+          Icons.navigate_before,  // add custom icons also
+        ),
         onTap: () {
           context.read<AuthenticationService>().signOut();
-          child: Icon(
-            Icons.navigate_before,  // add custom icons also
-          );
          },
       ),
       ),
