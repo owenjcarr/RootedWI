@@ -46,7 +46,7 @@ void main() => runApp(MaterialApp(
                         child: Icon(Icons.arrow_forward_sharp),                      
                         style: ElevatedButton.styleFrom(
                           shape: CircleBorder(),
-                          primary: Color(0xff5E3B66)
+                          primary: Color(0xff5E3B66),
                         ),
                       ),
                     ),              
