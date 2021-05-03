@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() => runApp(MaterialApp(
-  debugShowCheckedModeBanner: false,
-  home: Scaffold(
-    body: Column(
+void main() => runApp(Change());
+
+class Change extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ChangePassword(),
+    );
+  }
+}
+
+Widget ChangePassword() {
+  return Scaffold(
+      body: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Row(
@@ -46,7 +57,7 @@ void main() => runApp(MaterialApp(
                         child: Icon(Icons.arrow_forward_sharp),                      
                         style: ElevatedButton.styleFrom(
                           shape: CircleBorder(),
-                          primary: Color(0xff5E3B66),
+                          primary: Color(0xff5E3B66)
                         ),
                       ),
                     ),              
@@ -72,10 +83,9 @@ void main() => runApp(MaterialApp(
           ]
           ),
       ],
-    ),
-  )
-));
-
+    )
+  );
+}
 
 class ShapesPainter extends CustomPainter {
   final Color color;
@@ -99,14 +109,3 @@ class ShapesPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
-
-// import 'package:flutter/material.dart';
-
-// class ChangePassScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Text('Change Password Screen')
-//     );
-//   }
-// }
