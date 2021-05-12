@@ -1,75 +1,205 @@
-import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../services/auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
+class Login extends StatelessWidget {
+
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
+
+Widget buildUser(TextEditingController _emailController) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(height: 10),
+      Container(
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: Colors.brown,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: Offset(0,2)
+            )
+          ]
+        ),
+        height: 60,
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          controller: this._emailController,
+          style: TextStyle(
+            color: Colors.white
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.only(top: 14),
+            prefixIcon: Icon(
+              Icons.email,
+              color: Color(0xff5E3B66),
+            ),
+            hintText: 'Email',
+            hintStyle: TextStyle(
+              color: Colors.white
+            )
+          ),
+        ),
+      )
+    ],
+  );
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  @override
-  Widget build(BuildContext context) {
-    var email, password, token;
-
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Email'
-            ),
-            onChanged: (val) {
-              email = val;
-            },
+Widget buildPassword(TextEditingController _passwordController) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(height: 10),
+      Container(
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: Colors.brown,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white,
+              blurRadius: 6,
+              offset: Offset(0,2)
+            )
+          ]
+        ),
+        height: 60,
+        child: TextField(
+          obscureText: true,
+          controller: this._passwordController,
+          style: TextStyle(
+            color: Colors.white
           ),
-          TextField(
-            obscureText:  true,
-            decoration: InputDecoration(
-              labelText: 'Password'
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.only(top: 14),
+            prefixIcon: Icon(
+              Icons.lock,
+              color: Color(0xff5E3B66),
             ),
-            onChanged: (val) {
-              password = val;
-            },
+            hintText: 'Password',
+            hintStyle: TextStyle(
+              color: Colors.white
+            )
           ),
-          SizedBox(height: 10.0),
-          RaisedButton(
-            child: Text('Login'),
-            color: Colors.blue,
-            onPressed: () 
-              async {
-              var dio = Dio();
-              var response; 
-              try {
-                response = await dio.post('http://10.0.2.2:8000/api/auth/', data: {'email': email, 'password': password});
-              } catch (e) {
-                response = e;
-              }
-
-              print(response.toString());
-              
-              /*
-              Auth().login(email, password).then((val) {
-                if (val.data['success']) {
-                  token = val.data['token'];
-                  Fluttertoast.showToast(
-                    msg: 'Logged In',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.green,
-                    textColor: Colors.white,
-                    fontSize: 16.0
-                    );
-                }
-              });
-              */
-            },
-          )
-        ],
+        ),
       )
-    );
-  }
+    ],
+  );
+}
+
+Widget buildLoginBtn(BuildContext context) {
+  return Container (
+    padding: EdgeInsets.symmetric(vertical: 25),
+    width: double.infinity,
+    child: RaisedButton(
+      elevation: 5,
+      onPressed: () {
+        try {
+          context.read<AuthenticationService>().signIn(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          );
+        } on FirebaseAuthException catch (e) {
+          print('Failed with error code: ${e.code}');
+          print(e.message);
+        }
+      },
+      padding: EdgeInsets.all(15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15)
+      ),
+      color: Color(0xff5E3B66),
+      child: Text(
+        'LOGIN',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold
+        ),
+      )
+    ),
+  );
+}
+
+Widget buildChangePassword() {
+  return Container(
+    alignment: Alignment.centerRight,
+    child: FlatButton(
+      onPressed: () => {
+      },
+      padding: EdgeInsets.only(right: 0),
+      child: Text(
+        'Change Password',
+        style: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.bold
+        ),
+      ),      
+    ),
+  );
+}
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: GestureDetector(
+        child: Stack (
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xffffffff),
+                    Color(0xffffffff),
+                    Color(0xffffffff),
+                    Color(0xffffffff),
+                  ]
+                )
+              ),
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 120
+                ),
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Container(
+                  child: Image(
+                  image: AssetImage('assets/logo.jpg'),
+                  ),
+                ),
+                SizedBox(height: 50),
+                buildUser(_emailController),
+                SizedBox(height: 20),
+                buildPassword(_passwordController),
+                buildLoginBtn(context),
+                buildChangePassword(),
+              ],
+            ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+
+  );
+}
+
 }
