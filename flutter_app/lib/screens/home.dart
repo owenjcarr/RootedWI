@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_app/services/auth.dart';
+void main() => runApp(HomeScreen());
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return MaterialApp(
+      home: Container(
       child: ProduceList(),
       alignment: Alignment(0.0, 0.3),
+    )
     );
   }
 }
@@ -56,17 +59,29 @@ class _ProduceListState extends State<ProduceList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hello"),
-        leading: GestureDetector(
-        child: Icon(
-          Icons.navigate_before,  // add custom icons also
+      title: Text("Hello"),
+      actions: [
+        PopupMenuButton(
+          child: Icon(
+            Icons.more_vert
+          ),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: GestureDetector(
+                child: TextButton(
+                  child: Text('Sign out',style: TextStyle(fontSize: 17.0))
+                ),
+                onTap: () {
+                  context.read<AuthenticationService>().signOut();
+                }
+              )
+            ),
+          ]
         ),
-        onTap: () {
-          context.read<AuthenticationService>().signOut();
-         },
-      ),
+      ],
       ),
       body: _buildProduceList(),
     );
   }
+
 }
