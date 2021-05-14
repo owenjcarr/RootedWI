@@ -1,23 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ProduceList(),
+      child: ProduceListWidget(),
       alignment: Alignment(0.0, 0.3),
     );
   }
 }
 
-class ProduceList extends StatefulWidget {
+class ProduceListWidget extends StatefulWidget {
   @override
-  _ProduceListState createState() => _ProduceListState();
+  _ProduceListWidgetState createState() => _ProduceListWidgetState();
 }
 
-class _ProduceListState extends State<ProduceList> {
+class Produce {
+  final int id;
+  final String name;
+  final String cost;
+
+  Produce({this.id, this.name, this.cost});
+  
+  factory Produce.fromJson(Map<String, dynamic> json) {
+    return Produce(
+      id: json['id'],
+      name: json['name'],
+      cost: json['cost'],
+    );
+  }
+
+}
+Future<http.Response> getProduce() {
+  String base = '10.0.2.2';//@TODO: figure out what to change this to in production
+  return http.post(
+    Uri.https(base, 'api/produce'),
+    headers: <String, String> {
+      'Content-Type': 'application/json; charset=UTF-8',
+    }
+  );
+}
+
+Future<List<Produce>> createProduceList() async{
+  final response = await getProduce();
+  print(response);
+}
+
+class _ProduceListWidgetState extends State<ProduceListWidget> {
+  final ProduceList = <Produce>[];
   Widget _buildRow(num index) {
     return ListTile(
       title: Text('Produce-$index'),
@@ -58,13 +91,13 @@ class _ProduceListState extends State<ProduceList> {
       appBar: AppBar(
         title: Text("Hello"),
         leading: GestureDetector(
-        child: Icon(
-          Icons.navigate_before,  // add custom icons also
+          child: Icon(
+            Icons.navigate_before, // add custom icons also
+          ),
+          onTap: () {
+            context.read<AuthenticationService>().signOut();
+          },
         ),
-        onTap: () {
-          context.read<AuthenticationService>().signOut();
-         },
-      ),
       ),
       body: _buildProduceList(),
     );
