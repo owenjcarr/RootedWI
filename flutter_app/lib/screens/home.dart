@@ -49,12 +49,28 @@ List<Produce> createProduceList(http.Response response) {
     return out;
 }
 
+Future<http.Response> getBalanceFuture(){
+  String base = '10.0.2.2:8000';//@TODO: figure out what to change this to in production
+  return http.get(
+    Uri.http(base, 'api/balance/John Doe'),
+    headers: <String, String> {
+      'Content-Type': 'application/json; charset=UTF-8',
+    }
+  );
+}
+
+int getBalance(http.Response response) {
+  Map<String, dynamic> responseJson = jsonDecode(response.body);
+  int balance = responseJson['balance'];
+  debugPrint(balance.toString());
+  return balance;
+}
+
 class _ProduceListWidgetState extends State<ProduceListWidget> {
   final Future<http.Response> _produceFuture = getProduceFuture();
+  final Future<http.Response> _balanceFuture = getBalanceFuture();
 
   Widget _buildRow(Produce produce) {
-    debugPrint(produce.name);
-    debugPrint(produce.cost);
     return ListTile(
       title: Text(produce.name),
       trailing: Text(produce.cost),
@@ -133,11 +149,27 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
     );
   }
 
+  Widget _buildBalance() {
+    return FutureBuilder<http.Response>(
+      future: _balanceFuture,
+      builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+        if (snapshot.hasData) {
+          int balance = getBalance(snapshot.data);
+          return Text('Balance: $balance');
+        } else if(snapshot.hasError){
+          return Text("Error");
+        } else{
+          return Text("Retrieving. . .");
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hello"),
+        title: Text("Name here"),
         leading: GestureDetector(
           child: Icon(
             Icons.navigate_before, // add custom icons also
@@ -146,6 +178,7 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
             context.read<AuthenticationService>().signOut();
           },
         ),
+        actions: [_buildBalance()],
       ),
       body: _buildProduceList(),
     );
