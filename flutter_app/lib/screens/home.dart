@@ -3,6 +3,7 @@ import 'package:flutter_app/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -72,14 +73,12 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
 
   Widget _buildRow(Produce produce) {
     return ListTile(
-      title: Text(produce.name),
-      trailing: Text(produce.cost),
+      title: Text(produce.name, style: GoogleFonts.playfairDisplay())
+      trailing: Text(produce.cost, style: GoogleFonts.playfairDisplay()),
     );
   }
 
   Widget _buildProduceList() {
-    final title = 'Available Produce This Week';
-
     const titleColor = Color(0xff5E3B66);
     return FutureBuilder<http.Response>(
       future: _produceFuture,
@@ -155,7 +154,13 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
       builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
         if (snapshot.hasData) {
           int balance = getBalance(snapshot.data);
-          return Text('Balance: $balance');
+          return Text('Account Balance: \$$balance',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.playfairDisplay(
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Playfair Display',
+                  fontSize: 27,);
         } else if(snapshot.hasError){
           return Text("Error");
         } else{
@@ -165,22 +170,79 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
     );
   }
 
+  FractionallySizedBox _buildNameBalance() {
+    String name = "FirstName LastName";
+    final backgroundColor = Color(0xff637724);
+    double balance = 3000.00;
+    return FractionallySizedBox(
+      alignment: Alignment.center,
+      heightFactor: 1.0,
+      widthFactor: 1.0,
+      child: Container(
+        color: backgroundColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              name,
+              // Center if name is too long and split into two lines
+              textAlign: TextAlign.center,
+              style: GoogleFonts.playfairDisplay(
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Playfair Display',
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            _buildBalance(),
+//             Text(
+//               "Account Balance: \$" + balance.toString(),
+//               textAlign: TextAlign.center,
+//               style: GoogleFonts.playfairDisplay(
+//                 textStyle: TextStyle(
+//                   color: Colors.white,
+//                   fontFamily: 'Playfair Display',
+//                   fontSize: 27,
+//                   // fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget produceList = _buildProduceList();
+    final title = 'Available Produce This Week';
+    final titleColor = Color(0xff5E3B66);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Name here"),
-        leading: GestureDetector(
-          child: Icon(
-            Icons.navigate_before, // add custom icons also
+      body: Column(
+        children: [
+          // _buildNameBalance(),
+          Flexible(flex: 1, child: _buildNameBalance()),
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              style: GoogleFonts.playfairDisplay(
+                textStyle: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0),
+              ),
+            ),
           ),
-          onTap: () {
-            context.read<AuthenticationService>().signOut();
-          },
-        ),
-        actions: [_buildBalance()],
+          Expanded(
+            flex: 3,
+            child: produceList,
+          ),
+        ],
       ),
-      body: _buildProduceList(),
     );
   }
 }
