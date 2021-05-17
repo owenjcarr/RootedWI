@@ -83,7 +83,7 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
             List<Produce> _produceList = createProduceList(snapshot.data);
             return ListView.builder(
               padding: EdgeInsets.all(16.0),
-              itemCount: _produceList.length * 2 + 2,
+              itemCount: _produceList.length * 2-1,
               itemBuilder: (context, i) {
                 if (i.isOdd) return Divider();
 
