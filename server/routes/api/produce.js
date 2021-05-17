@@ -17,10 +17,12 @@ async function getProduce(){
 }
 
 router.get('/', async (req, res) => {
+    console.log(JSON.stringify(req.headers));
     let produce = await getProduce();
+    response = {produce:produce};
     // TODO: use try catch to return 400 on error
     res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(produce));
+    res.end(JSON.stringify(response));
 })
 
 module.exports = router;
