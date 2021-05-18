@@ -29,35 +29,32 @@ class Produce {
 }
 
 Future<http.Response> getProduceFuture() {
-  String base = '10.0.2.2:8000';//@TODO: figure out what to change this to in production
-  return http.get(
-    Uri.http(base, 'api/produce'),
-    headers: <String, String> {
-      'Content-Type': 'application/json; charset=UTF-8',
-    }
-  );
+  String base =
+      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
+  return http.get(Uri.http(base, 'api/produce'), headers: <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8',
+  });
 }
 
 List<Produce> createProduceList(http.Response response) {
-    Map<String, dynamic> responseJson = jsonDecode(response.body);
-    List<dynamic> foo = responseJson['produce'];
+  Map<String, dynamic> responseJson = jsonDecode(response.body);
+  List<dynamic> foo = responseJson['produce'];
 
-    List<Produce> out = [];
-    for(var product in foo) {
-      debugPrint(product.toString());
-      out.add(Produce(product['_id'], product['Name'], product['Cost']));
-    }
-    return out;
+  List<Produce> out = [];
+  for (var product in foo) {
+    debugPrint(product.toString());
+    out.add(Produce(product['_id'], product['Name'], product['Cost']));
+  }
+  return out;
 }
 
-Future<http.Response> getBalanceFuture(){
-  String base = '10.0.2.2:8000';//@TODO: figure out what to change this to in production
-  return http.get(
-    Uri.http(base, 'api/balance/John Doe'),
-    headers: <String, String> {
-      'Content-Type': 'application/json; charset=UTF-8',
-    }
-  );
+Future<http.Response> getBalanceFuture() {
+  String base =
+      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
+  return http
+      .get(Uri.http(base, 'api/balance/John Doe'), headers: <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8',
+  });
 }
 
 int getBalance(http.Response response) {
@@ -73,46 +70,33 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
 
   Widget _buildRow(Produce produce) {
     return ListTile(
-      title: Text(produce.name, style: GoogleFonts.playfairDisplay())
+      title: Text(produce.name, style: GoogleFonts.playfairDisplay()),
       trailing: Text(produce.cost, style: GoogleFonts.playfairDisplay()),
     );
   }
 
   Widget _buildProduceList() {
-    const titleColor = Color(0xff5E3B66);
     return FutureBuilder<http.Response>(
-      future: _produceFuture,
-      builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
-        if (snapshot.hasData) {
-          List<Produce> _produceList = createProduceList(snapshot.data);
-          return ListView.builder(
-            padding: EdgeInsets.all(16.0),
-            itemCount: _produceList.length*2+2,
-            itemBuilder: (context, i) {
-              if (i == 0) {
-                return Column(
-                  children: <Widget>[
-                    Text(title,
-                        style: TextStyle(
-                            // color: Colors.purple,
-                            color: titleColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0)),
-                  ],
-                );
-              }
-              if (i.isOdd) return Divider();
+        future: _produceFuture,
+        builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+          if (snapshot.hasData) {
+            List<Produce> _produceList = createProduceList(snapshot.data);
+            return ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: _produceList.length * 2-1,
+              itemBuilder: (context, i) {
+                if (i.isOdd) return Divider();
 
-              final index = (i ~/ 2)-1;
-              return _buildRow(_produceList[index]);
-            },
-          );
-        } else if(snapshot.hasError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children : const <Widget>[
+                final index = (i ~/ 2);
+                return _buildRow(_produceList[index]);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
                   const Icon(
                     Icons.error_outline,
                     color: Colors.red,
@@ -123,29 +107,28 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
                     child: Text('An error has occured'),
                   )
                 ],
-            ),
-          );
-        } else{
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children : const <Widget>[
-                SizedBox(
-                  child: CircularProgressIndicator(),
-                  width: 60,
-                  height: 60,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Retrieving produce for this week'),
-                )
+              ),
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Retrieving produce for this week'),
+                  )
                 ],
-            ),
-          );
-        }
-      }
-    );
+              ),
+            );
+          }
+        });
   }
 
   Widget _buildBalance() {
@@ -154,16 +137,20 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
       builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
         if (snapshot.hasData) {
           int balance = getBalance(snapshot.data);
-          return Text('Account Balance: \$$balance',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.playfairDisplay(
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Playfair Display',
-                  fontSize: 27,);
-        } else if(snapshot.hasError){
+          return Text(
+            'Account Balance: \$$balance',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.playfairDisplay(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Playfair Display',
+                fontSize: 27,
+              ),
+            ),
+          );
+        } else if (snapshot.hasError) {
           return Text("Error");
-        } else{
+        } else {
           return Text("Retrieving. . .");
         }
       },
@@ -208,7 +195,7 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
 //                   // fontWeight: FontWeight.bold,
 //                 ),
 //               ),
-            ),
+            // ),
           ],
         ),
       ),
