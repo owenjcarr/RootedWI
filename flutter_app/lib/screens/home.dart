@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_app/services/http.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -28,14 +29,6 @@ class Produce {
   Produce(this.id, this.name, this.cost);
 }
 
-Future<http.Response> getProduceFuture() {
-  String base =
-      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
-  return http.get(Uri.http(base, 'api/produce'), headers: <String, String>{
-    'Content-Type': 'application/json; charset=UTF-8',
-  });
-}
-
 List<Produce> createProduceList(http.Response response) {
   Map<String, dynamic> responseJson = jsonDecode(response.body);
   List<dynamic> foo = responseJson['produce'];
@@ -48,21 +41,7 @@ List<Produce> createProduceList(http.Response response) {
   return out;
 }
 
-Future<http.Response> getBalanceFuture() {
-  String base =
-      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
-  return http
-      .get(Uri.http(base, 'api/balance/John Doe'), headers: <String, String>{
-    'Content-Type': 'application/json; charset=UTF-8',
-  });
-}
 
-int getBalance(http.Response response) {
-  Map<String, dynamic> responseJson = jsonDecode(response.body);
-  int balance = responseJson['balance'];
-  debugPrint(balance.toString());
-  return balance;
-}
 
 class _ProduceListWidgetState extends State<ProduceListWidget> {
   final Future<http.Response> _produceFuture = getProduceFuture();
