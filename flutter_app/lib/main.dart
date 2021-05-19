@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/home.dart';
-import 'package:flutter_app/screens/sign_in.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:provider/provider.dart';
 import './screens/login.dart';
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'RootedWI',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.brown,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: AuthenticationWrapper(),
@@ -46,6 +45,6 @@ class AuthenticationWrapper extends StatelessWidget {
     if(firebaseUser != null) {
       return HomeScreen();
     }
-    return Login();
+      return Login();
   }
 }
