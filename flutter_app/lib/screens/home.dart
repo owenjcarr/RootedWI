@@ -45,7 +45,7 @@ List<Produce> createProduceList(http.Response response) {
 
 class _ProduceListWidgetState extends State<ProduceListWidget> {
   final Future<http.Response> _produceFuture = getProduceFuture();
-  final Future<http.Response> _balanceFuture = getBalanceFuture();
+  final Future<http.Response> _balanceFuture = getBalanceFuture('John Doe');
 
   Widget _buildRow(Produce produce) {
     return ListTile(

@@ -18,11 +18,11 @@ int getBalance(http.Response response) {
   return balance;
 }
 
-Future<http.Response> getBalanceFuture() {
+Future<http.Response> getBalanceFuture(String email) {
   String base =
       '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
   return http
-      .get(Uri.http(base, 'api/balance/John Doe'), headers: <String, String>{
+      .get(Uri.http(base, 'api/balance/$email'), headers: <String, String>{
     'Content-Type': 'application/json; charset=UTF-8',
   });
 }
