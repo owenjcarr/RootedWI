@@ -1,7 +1,5 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const connectDB_temp = require('./config/db_temp');
-const getAllData = require('./accessBalanceSheet');
 
 connectDB()
 
@@ -13,43 +11,31 @@ app.use(express.json());
 // use routes
 app.use('/api/users', require ('./routes/api/users'));
 app.use('/api/auth', require ('./routes/api/auth'));
+app.use('/api/produce', require('./routes/api/produce'));
+app.use('/api/balance', require('./routes/api/balance'));
 
-
-// TODO: use express routes
-async function getBalance(name){
-    let data = await getAllData(name);
-    console.log(data);
-    return data;
-}
-
-async function _getProduce(client){
-    const result = await client.db("data").collection("weekly_produce").find().toArray();
-    if (result) {
-        console.log(result);
-    } else{
-        console.error("weekly produce is empty");
+app.use((req, res, next) => {
+    res.status(404);
+    console.log(req.url);
+    // respond with html page
+    if (req.accepts('html')) {
+        console.log('html');
+        console.log(JSON.stringify(req.headers));
+        res.json({ error: `${req.url} not found` });
+        return;
     }
-    return result;
-};
 
-async function getProduce(){
-    let produce = await connectDB_temp(_getProduce);
-    return produce;
-}
+    // respond with json
+    if (req.accepts('json')) {
+        console.log('json');
+        res.json({ error: `${req.url} not found` });
+        return;
+    }
 
-app.get('/api/produce', async (req, res) => {
-    let produce = await getProduce();
-    // TODO: use try catch to return 400 on error
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(produce));
-})
+    // default to plain-text. send()
+    res.type('txt').send('Not found');
+});
 
-app.get('/api/balance/:name', async (req,res) => {
-    let name = req.params.name;
-    let balance = await getBalance(name);
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify({name, balance}));
-})
 
 app.get('/', (req,res) => {
     res.send('Hello World');

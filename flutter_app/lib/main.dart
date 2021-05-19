@@ -20,11 +20,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
-            create: (_) => AuthenticationService(FirebaseAuth.instance),
-          ),
-          StreamProvider(
-            create: (context) => context.read<AuthenticationService>().authStateChanges,
-          ),
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+        ),
       ],
       child: MaterialApp(
         title: 'RootedWI',
@@ -43,7 +44,7 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
-    if(firebaseUser != null) {
+    if (firebaseUser != null) {
       return HomeScreen();
     }
     return Login();
