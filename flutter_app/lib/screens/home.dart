@@ -83,7 +83,7 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
             List<Produce> _produceList = createProduceList(snapshot.data);
             return ListView.builder(
               padding: EdgeInsets.all(16.0),
-              itemCount: _produceList.length * 2-1,
+              itemCount: _produceList.length * 2 - 1,
               itemBuilder: (context, i) {
                 if (i.isOdd) return Divider();
 
@@ -160,7 +160,6 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
   FractionallySizedBox _buildNameBalance() {
     String name = "FirstName LastName";
     final backgroundColor = Color(0xff637724);
-    double balance = 3000.00;
     return FractionallySizedBox(
       alignment: Alignment.center,
       heightFactor: 1.0,
@@ -202,6 +201,30 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
     );
   }
 
+  PopupMenuButton _popupMenuButton(BuildContext context) {
+    return PopupMenuButton(
+      child: Icon(Icons.more_vert),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: GestureDetector(
+            child: TextButton(
+              child: Text(
+                'Sign out',
+                style: TextStyle(
+                  fontSize: 17.0,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            onTap: () {
+              context.read<AuthenticationService>().signOut();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget produceList = _buildProduceList();
@@ -209,18 +232,35 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
     final titleColor = Color(0xff5E3B66);
     return Scaffold(
       body: Column(
+        // children: [
+        // Flexible(flex: 1, child: _buildNameBalance()),
+
         children: [
-          // _buildNameBalance(),
-          Flexible(flex: 1, child: _buildNameBalance()),
+          Flexible(
+            flex: 1,
+            child: Stack(
+              children: [
+                _buildNameBalance(),
+                Positioned(
+                  // height: 10,
+                  // width: 10,
+                  top: 30,
+                  left: 10,
+                  child: _popupMenuButton(context),
+                )
+              ],
+            ),
+          ),
           Container(
             alignment: Alignment.center,
             child: Text(
               title,
               style: GoogleFonts.playfairDisplay(
                 textStyle: TextStyle(
-                    color: titleColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0),
+                  color: titleColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
               ),
             ),
           ),
