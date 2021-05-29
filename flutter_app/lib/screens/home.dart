@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/auth.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
-  @override
   Widget build(BuildContext context) {
     return Container(
       child: ProduceListWidget(),
       alignment: Alignment(0.0, 0.3),
     );
   }
+}
+
+Future<String> getUserEmail() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('email') ?? "";
 }
 
 class ProduceListWidget extends StatefulWidget {
@@ -67,6 +70,19 @@ int getBalance(http.Response response) {
 class _ProduceListWidgetState extends State<ProduceListWidget> {
   final Future<http.Response> _produceFuture = getProduceFuture();
   final Future<http.Response> _balanceFuture = getBalanceFuture();
+  String _email = "";
+
+  @override
+  void initState() {
+    getUserEmail().then(_updateEmail);
+    super.initState();
+  }
+
+  void _updateEmail(String email) {
+    setState(() {
+      this._email = email;
+    });
+  }
 
   Widget _buildRow(Produce produce) {
     return ListTile(
@@ -83,7 +99,7 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
             List<Produce> _produceList = createProduceList(snapshot.data);
             return ListView.builder(
               padding: EdgeInsets.all(16.0),
-              itemCount: _produceList.length * 2-1,
+              itemCount: _produceList.length * 2 - 1,
               itemBuilder: (context, i) {
                 if (i.isOdd) return Divider();
 
@@ -158,7 +174,8 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
   }
 
   FractionallySizedBox _buildNameBalance() {
-    String name = "FirstName LastName";
+    //String name = "FirstName LastName";
+    String email = _email;
     final backgroundColor = Color(0xff637724);
     double balance = 3000.00;
     return FractionallySizedBox(
@@ -171,7 +188,8 @@ class _ProduceListWidgetState extends State<ProduceListWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              name,
+              //name,
+              email,
               // Center if name is too long and split into two lines
               textAlign: TextAlign.center,
               style: GoogleFonts.playfairDisplay(
