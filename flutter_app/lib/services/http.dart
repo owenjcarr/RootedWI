@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 
+const String base = "rootedwi-app.herokuapp.com";
 Future<http.Response> getProduceFuture() {
-  String base =
-      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
   return http.get(Uri.http(base, 'api/produce'), headers: <String, String>{
     'Content-Type': 'application/json; charset=UTF-8',
   });
@@ -14,13 +13,16 @@ Future<http.Response> getProduceFuture() {
 int getBalance(http.Response response) {
   Map<String, dynamic> responseJson = jsonDecode(response.body);
   int balance = responseJson['balance'];
-  debugPrint(balance.toString());
   return balance;
 }
 
+String getName(http.Response response) {
+  Map<String, dynamic> responseJson = jsonDecode(response.body);
+  String name = responseJson['name'];
+  return name;
+}
+
 Future<http.Response> getBalanceFuture(String email) {
-  String base =
-      '10.0.2.2:8000'; //@TODO: figure out what to change this to in production
   return http
       .get(Uri.http(base, 'api/balance/$email'), headers: <String, String>{
     'Content-Type': 'application/json; charset=UTF-8',

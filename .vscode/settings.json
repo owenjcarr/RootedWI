@@ -1,0 +1,4 @@
+{
+    "dart.enableSdkFormatter": false,
+    "vim.foldfix": true
+}
